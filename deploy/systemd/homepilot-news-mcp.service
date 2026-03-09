@@ -1,0 +1,22 @@
+[Unit]
+Description=HomePilot News MCP Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/homepilot-news-mcp
+EnvironmentFile=/opt/homepilot-news-mcp/.env
+ExecStart=/opt/homepilot-news-mcp/.venv/bin/python -m app.main --http
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/data /opt/homepilot-news-mcp
+CapabilityBoundingSet=
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target
