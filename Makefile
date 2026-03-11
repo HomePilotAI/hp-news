@@ -12,12 +12,10 @@ UV := $(shell command -v uv 2>/dev/null)
 # ── Install ──────────────────────────────────────────────
 install: $(VENV)/bin/activate
 ifdef UV
-	$(UV) pip install --python $(PYTHON) .
-	$(UV) pip install --python $(PYTHON) pytest httpx pytest-asyncio
+	$(UV) pip install --python $(PYTHON) ".[test]"
 else
 	$(PIP) install --upgrade pip
-	$(PIP) install .
-	$(PIP) install pytest httpx pytest-asyncio
+	$(PIP) install ".[test]"
 endif
 	@echo "\n✓ install complete – run 'make test' to verify"
 
