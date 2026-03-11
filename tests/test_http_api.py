@@ -19,8 +19,8 @@ async def test_health_endpoint(client):
     assert resp.status_code == 200
     body = resp.json()
     assert body["ok"] is True
-    assert "db_path" in body
-    assert "sources_enabled" in body
+    assert "name" in body
+    assert "ts" in body
 
 
 @pytest.mark.asyncio
