@@ -6,15 +6,27 @@ PIP        := $(VENV)/bin/pip
 PYTEST     := $(VENV)/bin/pytest
 DB_PATH    := /tmp/hp-news-test.sqlite3
 
+# Detect uv for faster installs
+UV := $(shell command -v uv 2>/dev/null)
+
 # ── Install ──────────────────────────────────────────────
 install: $(VENV)/bin/activate
+ifdef UV
+	$(UV) pip install --python $(PYTHON) .
+	$(UV) pip install --python $(PYTHON) pytest httpx pytest-asyncio
+else
 	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
+	$(PIP) install .
 	$(PIP) install pytest httpx pytest-asyncio
+endif
 	@echo "\n✓ install complete – run 'make test' to verify"
 
 $(VENV)/bin/activate:
+ifdef UV
+	$(UV) venv $(VENV) --python python3.11
+else
 	python3 -m venv $(VENV)
+endif
 
 # ── Test ─────────────────────────────────────────────────
 test: install
@@ -27,7 +39,11 @@ smoke: install
 
 # ── Lint (optional) ─────────────────────────────────────
 lint: install
+ifdef UV
+	$(UV) pip install --python $(PYTHON) ruff 2>/dev/null; $(VENV)/bin/ruff check app/
+else
 	$(PIP) install ruff 2>/dev/null; $(VENV)/bin/ruff check app/
+endif
 
 # ── Run ──────────────────────────────────────────────────
 run-http: install
