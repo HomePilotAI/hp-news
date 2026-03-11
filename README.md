@@ -39,17 +39,42 @@ Call:
 - `GET /v1/news/sources`
 
 ## Quick start
+
 ```bash
-python -m venv .venv
+# Using make (auto-detects uv for faster installs)
+make install
+cp .env.example .env
+make run-http
+```
+
+Or manually:
+
+```bash
+# With uv (fast)
+uv venv .venv --python python3.11
+uv pip install --python .venv/bin/python .
+cp .env.example .env
+.venv/bin/python -m app.main --http
+
+# With pip
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install .
 cp .env.example .env
 python -m app.main --http
 ```
 
+**Requires Python 3.11+**
+
 ## Run as MCP (stdio)
 ```bash
-python -m app.main --mcp
+make run-mcp
+# or: .venv/bin/python -m app.main --mcp
+```
+
+## Testing
+```bash
+make test
 ```
 
 ## Docker
