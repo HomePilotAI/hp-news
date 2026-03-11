@@ -22,7 +22,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--http", action="store_true", help="Run HTTP API server")
     parser.add_argument("--mcp", action="store_true", help="Run MCP stdio server")
+    parser.add_argument("--host", default=None, help="Override HTTP host")
+    parser.add_argument("--port", type=int, default=None, help="Override HTTP port")
     args = parser.parse_args()
+
+    # CLI flags override env/config values
+    host = args.host or settings.http_host
+    port = args.port or settings.http_port
 
     refresher = Refresher(
         conn,
@@ -37,7 +43,7 @@ def main():
         return
 
     app = create_app(conn, settings)
-    uvicorn.run(app, host=settings.http_host, port=settings.http_port)
+    uvicorn.run(app, host=host, port=port)
 
 if __name__ == "__main__":
     main()
